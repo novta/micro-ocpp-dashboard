@@ -68,9 +68,20 @@ export default function WebsocketControlPanel(props) {
                 setShowTable(true);
             }
         ).catch(
-            e => {
+            error => {
+                let errorMessage = "Unable to fetch websocket";
+                // Check for specific error types
+                if (error.response) {
+                  errorMessage += ` - Status: ${error.response.status}`;
+                  console.log("Error response:", error.response.data);
+                } else if (error.request) {
+                  errorMessage += " - Network request failed";
+                  console.log("Network request failed");
+                }
+                // Log generic error details
+                console.log("Error details:", error.message);
                 setFetchSuccess("");
-                setFetchError("Unable to fetch websocket");
+                setFetchError(errorMessage);
             }
         ).finally(
             () => {
